@@ -20,7 +20,7 @@ pipeline {
         - mountPath: /var/run/docker.sock
           name: docker-sock
     - name: helm
-      image: lachie83/k8s-helm
+      image: devth/helm
       command:
       - cat
       tty: true
