@@ -60,8 +60,10 @@ pipeline {
       steps {
         container('helm') {
           sh """
+             # create helm chart version
              helm package charts/wordsmith-api
-             # helm repo add chartmuseum http://
+             # upload helm chart
+             curl --data-binary "@wordsmith-api-1.0.0-SNAPSHOT.tgz" http://chartmuseum-chartmuseum.core.svc.cluster.local:8080/api/charts
              """
         }
       }
