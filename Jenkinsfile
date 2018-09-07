@@ -11,7 +11,25 @@ pipeline {
       command:
       - cat
       tty: true
-      """
+    - name: docker
+      image: docker:stable-dind
+      command:
+      - cat
+      tty: true
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+    - name: helm
+      image: lachie83/k8s-helm
+      command:
+      - cat
+      tty: true
+    volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: File
+"""
     }
 }
 
@@ -25,9 +43,24 @@ pipeline {
         }
       }
     }
+    stage('Build Docker Image') {
+      steps {
+        container('docker') {
+          sh "docker build -t wordsmith-api:1.0.0-SNAPSHOT ."
+          withCredentials([usernamePassword(credentialsId: 'bitbucket-server-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            sh """
+               docker login --username ${USERNAME} --password ${PASSWORD}
+               docker push ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT
+             """
+           }
+        }
+      }
+    }
     stage('Build Helm Chart') {
       steps {
-        sh 'echo TBD'
+        container('helm') {
+          sh 'helm package wordsmith-api'
+        }
       }
     }
     stage('Deploy to Staging environment') {
