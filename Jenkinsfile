@@ -6,8 +6,8 @@ pipeline {
   spec:
     containers:
     - name: jnlp
-    - name: maven
-      image: maven:3.5.4-jdk-8-alpine
+    - name: jdk
+      image: openjdk:11-jdk-slim
       command:
       - cat
       tty: true
@@ -36,9 +36,9 @@ pipeline {
   stages {
     stage('Build Java App') {
       steps {
-        container('maven') {
+        container('jdk') {
           withMaven() {
-            sh 'mvn clean deploy'
+            sh './mvnw clean deploy'
           }
         }
       }
@@ -59,7 +59,10 @@ pipeline {
     stage('Build Helm Chart') {
       steps {
         container('helm') {
-          sh 'helm package wordsmith-api'
+          sh """
+             helm package charts/wordsmith-api
+             # helm repo add chartmuseum http://
+             """
         }
       }
     }
