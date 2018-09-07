@@ -70,8 +70,14 @@ pipeline {
     }
     stage('Deploy to Staging environment') {
       steps {
-        sh 'echo TBD'
-      }
+        container('helm') {
+          sh """
+             helm init --client-only
+             helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
+             helm repo update
+             helm install --namespace staging --name wordsmith-api wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT
+             """
+        }      }
     }
   }
 }
