@@ -31,5 +31,5 @@ readinessProbe:
 terminationGracePeriodSeconds: 10
 ingress:
   hosts:
-  - api.wordsmith.beescloud.com
+  - api.preview.wordsmith.beescloud.com
   annotations:
