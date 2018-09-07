@@ -75,7 +75,7 @@ pipeline {
              helm init --client-only
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
-             helm install --namespace staging --name wordsmith-api wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT
+             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging
              """
         }      }
     }
