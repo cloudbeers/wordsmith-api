@@ -47,7 +47,7 @@ pipeline {
       steps {
         container('docker') {
           sh "docker build -t wordsmith-api:1.0.0-SNAPSHOT ."
-          withCredentials([usernamePassword(credentialsId: 'bitbucket-server-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+          withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             sh """
                docker login --username ${USERNAME} --password ${PASSWORD}
                docker push ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT
