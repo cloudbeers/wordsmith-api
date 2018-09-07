@@ -16,10 +16,7 @@ public class WordService {
   
   public String generate(String table) {
     String sql = "SELECT word FROM " + table + " ORDER BY random() LIMIT 1";
-
-    String retour = (String)jdbcTemplate.queryForObject(sql, String.class);
-
-    return retour;
+    return jdbcTemplate.queryForObject(sql, String.class);
   }
 
 }
