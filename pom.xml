@@ -59,6 +59,7 @@
     <properties>
         <java.version>1.8</java.version>
         <postgres.version>42.1.4</postgres.version>
+        <project.scm.id>github</project.scm.id>
     </properties>
 
 
@@ -67,6 +68,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
             </plugin>
         </plugins>
     </build>
@@ -80,5 +86,26 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    <repositories>
+        <repository>
+            <id>nexus.beescloud.com</id>
+            <url>https://nexus3.beescloud.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus.beescloud.com</id>
+            <url>https://nexus3.beescloud.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus.beescloud.com</id>
+            <url>https://nexus3.beescloud.com/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
 </project>

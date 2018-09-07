@@ -16,10 +16,12 @@ pipeline {
 }
 
   stages {
-    stage('Build component') {
+    stage('Build') {
       steps {
         container('maven') {
-          sh 'mvn clean package'
+          withMaven() {
+            sh 'mvn clean deploy'
+          }
         }
       }
     }
