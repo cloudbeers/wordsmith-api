@@ -1,4 +1,4 @@
-FROM openjdk:10-jre-slim
+FROM openjdk:8-jdk-slim
 ENV PORT 8080
 ENV CLASSPATH /opt/lib
 EXPOSE 8080
