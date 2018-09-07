@@ -46,10 +46,10 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         container('docker') {
-          sh "docker build -t wordsmith-api:1.0.0-SNAPSHOT ."
           withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             sh """
                docker login --username ${USERNAME} --password ${PASSWORD}
+               docker build -t ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT .
                docker push ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT
              """
            }
