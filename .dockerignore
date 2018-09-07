@@ -4,3 +4,4 @@ charts/
 target/
 work/
 .git/
+*.log
