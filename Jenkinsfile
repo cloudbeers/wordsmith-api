@@ -40,7 +40,7 @@ pipeline {
     stage('Build Java App') {
       steps {
         container('jdk') {
-          withMaven() {
+          withMaven(mavenOpts: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
             sh './mvnw clean deploy'
           }
         }
