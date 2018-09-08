@@ -24,12 +24,12 @@ spec:
         env:
           - name: "DATABASE_URL"
             value: {{ .Values.database.url }}
-          - name: "USERNAME"
+          - name: "DATABASE_USER"
             valueFrom:
               secretKeyRef:
                 key:  username
                 name: {{ .Release.Name }}-auth
-          - name: "PASSWORD"
+          - name: "DATABASE_PASSWORD"
             valueFrom:
               secretKeyRef:
                 key:  password
