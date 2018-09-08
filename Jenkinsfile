@@ -86,7 +86,7 @@ pipeline {
              helm repo update
 
              helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace preview --wait \
-                --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL}
+                --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
 
              kubectl get ingress wordsmith-api-preview-wordsmith-api
             """

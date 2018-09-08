@@ -15,7 +15,7 @@ kubectl port-forward $POD_NAME 8080:8080
 
 ```
 export POD_NAME=$(kubectl get pods --namespace preview -l "app=wordsmith-api-preview-wordsmith-api" -o jsonpath="{.items[0].metadata.name}")
-kubectl port-forward $POD_NAME 8080:8080
+kubectl port-forward --namespace preview $POD_NAME 8080:8080
 ```
 
 
