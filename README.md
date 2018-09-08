@@ -1,7 +1,25 @@
 
 
 
+
 # Notes
+
+## Chartmuseum
+
+```
+export POD_NAME=$(kubectl get pods --namespace core -l "app=chartmuseum" -l "release=chartmuseum" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8080:8080
+```
+
+## Preview environment
+
+```
+export POD_NAME=$(kubectl get pods --namespace preview -l "app=wordsmith-api-preview-wordsmith-api" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8080:8080
+```
+
+
+# Problems
 
 ```
  helm install stable/chartmuseum --name chartmuseum --set env.open.DISABLE_API=false,env.open.ALLOW_OVERWRITE=true

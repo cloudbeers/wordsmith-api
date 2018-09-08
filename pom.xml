@@ -64,6 +64,12 @@
 
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -83,6 +89,11 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>{{*}}</delimiter>
+                    </delimiters>
+                </configuration>
                 <executions>
                     <execution>
                         <id>copy-helm-charts</id>
@@ -99,9 +110,6 @@
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
-                            <delimiters>
-                                <delimiter>{{*}}</delimiter>
-                            </delimiters>
                         </configuration>
                     </execution>
                 </executions>
