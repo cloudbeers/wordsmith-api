@@ -31,8 +31,11 @@ pipeline {
           type: File
 """
     }
-}
-
+  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    disableConcurrentBuilds()
+  }
   stages {
     stage('Build Java App') {
       steps {
@@ -44,15 +47,16 @@ pipeline {
       }
     }
     stage('Build Docker Image') {
+      environment {
+        DOCKER_HUB_CREDS = credentials('hub.docker.com')
+      }
       steps {
         container('docker') {
-          withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-            sh """
-               docker login --username ${USERNAME} --password ${PASSWORD}
-               docker build -t ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT .
-               docker push ${USERNAME}/wordsmith-api:1.0.0-SNAPSHOT
-             """
-           }
+          sh """
+             docker login --username ${DOCKER_HUB_CREDS_USR} --password ${DOCKER_HUB_CREDS_PSW}
+             docker build -t ${DOCKER_HUB_CREDS_USR}/wordsmith-api:1.0.0-SNAPSHOT .
+             docker push ${DOCKER_HUB_CREDS_USR}/wordsmith-api:1.0.0-SNAPSHOT
+           """
         }
       }
     }
@@ -69,18 +73,25 @@ pipeline {
       }
     }
     stage('Deploy to Staging environment') {
+      environment {
+         PG_SQL_CREDS = credentials('postgresql.staging')
+         PG_SQL_JDBC_URL = 'jdbc:postgresql://wordsmith-staging.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith'
+         APP_HOST = 'api.staging.wordsmith.beescloud.com'
+      }
       steps {
         container('helm') {
           sh """
              helm init --client-only
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
-             # TODO inject database.url, database.password, database.username
-             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging --wait --set ingress.hosts[0]=api.staging.wordsmith.beescloud.com
-             kubectl get ingress wordsmith-api-staging-wordsmith-api
-             """
-        }      }
-    }
-  }
-}
 
+             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging --wait \
+                --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CRED_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL}
+
+             kubectl get ingress wordsmith-api-staging-wordsmith-api
+            """
+        } // container
+       } // steps
+    } // stage
+  } // stages
+}
