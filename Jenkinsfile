@@ -72,11 +72,11 @@ pipeline {
         }
       }
     }
-    stage('Deploy to Staging environment') {
+    stage('Deploy to Preview Environment') {
       environment {
-         PG_SQL_CREDS = credentials('postgresql.staging')
-         PG_SQL_JDBC_URL = 'jdbc:postgresql://wordsmith-staging.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith'
-         APP_HOST = 'api.staging.wordsmith.beescloud.com'
+         PG_SQL_CREDS = credentials('postgresql.preview')
+         PG_SQL_JDBC_URL = 'jdbc:postgresql://wordsmith-preview.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith'
+         APP_HOST = 'api.preview.wordsmith.beescloud.com'
       }
       steps {
         container('helm') {
@@ -85,10 +85,10 @@ pipeline {
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
 
-             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging --wait \
+             helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace preview --wait \
                 --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL}
 
-             kubectl get ingress wordsmith-api-staging-wordsmith-api
+             kubectl get ingress wordsmith-api-preview-wordsmith-api
             """
         } // container
        } // steps
