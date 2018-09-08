@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * TODO a todo message to demo Jenkins source code analysis capabilities
+ */
 @SpringBootApplication
 public class Application {
 
