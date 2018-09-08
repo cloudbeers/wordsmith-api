@@ -7,7 +7,7 @@ pipeline {
     containers:
     - name: jnlp
     - name: jdk
-      image: openjdk:11-jdk-slim
+      image: openjdk:8-jdk
       command:
       - cat
       tty: true
