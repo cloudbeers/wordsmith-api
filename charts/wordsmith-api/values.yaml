@@ -31,7 +31,7 @@ readinessProbe:
 terminationGracePeriodSeconds: 10
 ingress:
   hosts:
-  - api.preview.wordsmith.beescloud.com
+  - api.staging.wordsmith.beescloud.com
   annotations:
 database:
   url: jdbc:postgresql://wordsmith-staging.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith

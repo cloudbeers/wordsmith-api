@@ -75,7 +75,9 @@ pipeline {
              helm init --client-only
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
-             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging --wait
+             # TODO inject database.url, database.password, database.username
+             helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace staging --wait --set ingress.hosts[0]=api.staging.wordsmith.beescloud.com
+             kubectl get ingress wordsmith-api-staging-wordsmith-api
              """
         }      }
     }

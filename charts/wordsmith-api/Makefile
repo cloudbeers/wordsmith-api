@@ -1,4 +1,4 @@
-CHART_REPO := http://jenkins-x-chartmuseum:8080
+CHART_REPO := http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
 CURRENT=$(pwd)
 NAME := wordsmith-api
 OS := $(shell uname)
