@@ -1,1 +1,1 @@
-# Java application
+# Wordsmith API
