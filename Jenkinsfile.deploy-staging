@@ -1,0 +1,42 @@
+def label = "wordsmith-api-${UUID.randomUUID().toString()}"
+podTemplate(label: label, yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+    containers:
+    - name: jnlp
+    - name: helm
+      image: devth/helm
+      command:
+      - cat
+      tty: true
+"""
+    ) {
+  userInput = input message: 'Application Version', ok: 'Deploy', parameters: [string(description: 'Wordsmith API Helm Chart Version', name: 'Wordsmith Api Version', trim: true)], submitterParameter: 'submitter'
+  echo("$userInput")
+  APPLICATION_VERSION = userInput['Wordsmith Api Version']
+  echo("application version: $APPLICATION_VERSION")
+  node (label) {
+    stage('Deploy to Staging Environment') {
+        container('helm') {
+          // FIXME use staging database instead of preview database
+          PG_SQL_JDBC_URL = 'jdbc:postgresql://wordsmith-preview.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith'
+          APP_HOST = 'api.preview.wordsmith.beescloud.com'
+          withCredentials([usernamePassword(credentialsId: 'postgresql.preview', passwordVariable: 'PG_SQL_CREDS_PSW', usernameVariable: 'PG_SQL_CREDS_USR')]) {
+              sh """
+                 helm init --client-only
+                 helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
+                 helm repo update
+
+                 helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version ${APPLICATION_VERSION} --install --namespace staging --wait \
+                    --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
+
+                 kubectl describe deployment wordsmith-api-staging-wordsmith-api --namespace staging
+                 echo "FIXME fix ingress"
+                 kubectl get ingress wordsmith-api-staging-wordsmith-api || true
+                """
+          } // withCredentials
+        } // container
+    } // stage
+  } // node
+} // podTemplate

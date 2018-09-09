@@ -1,0 +1,72 @@
+def label = "wordsmith-api-release-${UUID.randomUUID().toString()}"
+podTemplate(label: label, yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: jnlp
+    - name: jdk
+      image: openjdk:8-jdk
+      command:
+      - cat
+      tty: true
+    - name: docker
+      image: docker:stable-dind
+      command:
+      - cat
+      tty: true
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+    - name: helm
+      image: devth/helm
+      command:
+      - cat
+      tty: true
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+        type: File
+"""
+) {
+    node (label) {
+      git 'https://github.com/cloudbeers/wordsmith-api.git'
+      stage('Release Java App') {
+        container('jdk') {
+          withEnv(['GIT_COMMITTER_NAME=Cyrille Le Clerc', 'GIT_COMMITTER_EMAIL=cleclerc@cloudbees.com', 'GIT_AUTHOR_NAME=Cyrille Le Clerc', 'GIT_AUTHOR_EMAIL=cleclerc@cloudbees.com']) {
+            withMaven(mavenOpts: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
+              sh './mvnw release:prepare release:perform'
+            }
+          }
+        }
+      }
+      stage('Release Docker Image') {
+        container('docker') {
+          withCredentials([usernamePassword(credentialsId: 'hub.docker.com', passwordVariable: 'DOCKER_HUB_CREDS_PSW', usernameVariable: 'DOCKER_HUB_CREDS_USR')]) {
+            APPLICATION_VERSION = readFile("target/VERSION")
+            sh """
+               cd target/checkout
+               docker login --username ${DOCKER_HUB_CREDS_USR} --password ${DOCKER_HUB_CREDS_PSW}
+               rm target/*-javadoc.jar
+               rm target/*-sources.jar
+               docker build -t ${DOCKER_HUB_CREDS_USR}/wordsmith-api:${APPLICATION_VERSION} .
+               docker push ${DOCKER_HUB_CREDS_USR}/wordsmith-api:${APPLICATION_VERSION}
+             """
+          }
+        }
+      }
+      stage('Release Helm Chart') {
+        container('helm') {
+          sh """
+            cd target/checkout
+            # create helm chart version
+            helm package target/charts/wordsmith-api
+            # upload helm chart
+            curl --data-binary "@wordsmith-api-${APPLICATION_VERSION}.tgz" http://chartmuseum-chartmuseum.core.svc.cluster.local:8080/api/charts
+            """
+        }
+      }
+    }
+  }
+
