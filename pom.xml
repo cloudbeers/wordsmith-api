@@ -61,7 +61,9 @@
         <postgres.version>42.1.4</postgres.version>
         <project.scm.id>github</project.scm.id>
     </properties>
-
+    <scm>
+        <connection>scm:git:https://github.com/cloudbeers/wordsmith-api.git </connection>
+    </scm>
 
     <build>
         <resources>
