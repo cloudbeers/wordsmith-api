@@ -53,9 +53,10 @@ pipeline {
       steps {
         container('docker') {
           sh """
+             set APPLICATION_VERSION=$(cat target/VERSION | xargs)
              docker login --username ${DOCKER_HUB_CREDS_USR} --password ${DOCKER_HUB_CREDS_PSW}
-             docker build -t ${DOCKER_HUB_CREDS_USR}/wordsmith-api:1.0.0-SNAPSHOT .
-             docker push ${DOCKER_HUB_CREDS_USR}/wordsmith-api:1.0.0-SNAPSHOT
+             docker build -t ${DOCKER_HUB_CREDS_USR}/wordsmith-api:$APPLICATION_VERSION .
+             docker push ${DOCKER_HUB_CREDS_USR}/wordsmith-api:$APPLICATION_VERSION
            """
         }
       }
@@ -64,10 +65,13 @@ pipeline {
       steps {
         container('helm') {
           sh """
+             set APPLICATION_VERSION=$(cat target/VERSION | xargs)
              # create helm chart version
              helm package target/charts/wordsmith-api
+             # HELM_CHART_ARCHIVE=$(find -type f -name 'wordsmith-api-*.tgz')
+             HELM_CHART_ARCHIVE="wordsmith-api-$APPLICATION_VERSION.tgz"
              # upload helm chart
-             curl --data-binary "@wordsmith-api-1.0.0-SNAPSHOT.tgz" http://chartmuseum-chartmuseum.core.svc.cluster.local:8080/api/charts
+             curl --data-binary "@$HELM_CHART_ARCHIVE" http://chartmuseum-chartmuseum.core.svc.cluster.local:8080/api/charts
              """
         }
       }
@@ -81,11 +85,13 @@ pipeline {
       steps {
         container('helm') {
           sh """
+             set APPLICATION_VERSION=$(cat target/VERSION | xargs)
+
              helm init --client-only
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
 
-             helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version 1.0.0-SNAPSHOT --install --namespace preview --wait \
+             helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version $APPLICATION_VERSION --install --namespace preview --wait \
                 --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
 
              kubectl describe deployment wordsmith-api-preview-wordsmith-api --namespace preview
