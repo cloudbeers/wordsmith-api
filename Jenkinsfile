@@ -29,6 +29,11 @@ pipeline {
       command:
       - cat
       tty: true
+    - name: curl
+      image: appropriate/curl
+      command:
+      - cat
+      tty: true
     volumes:
       - name: docker-sock
         hostPath:
@@ -109,6 +114,11 @@ pipeline {
           sh """
             kubectl describe deployment wordsmith-api-preview-wordsmith-api --namespace preview
             kubectl get ingress wordsmith-api-preview-wordsmith-api --namespace preview
+          """
+        } // container
+        container('curl') {
+          sh """
+            curl -v https://api.preview.wordsmith.beescloud.com/actuator/health
           """
         } // container
       } // steps

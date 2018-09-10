@@ -15,6 +15,11 @@ spec:
       command:
       - cat
       tty: true
+    - name: curl
+      image: appropriate/curl
+      command:
+      - cat
+      tty: true
 """
     ) {
   userInput = input message: 'Application Version', ok: 'Deploy', parameters: [string(description: 'Wordsmith API Helm Chart Version', name: 'Wordsmith Api Version', trim: true)], submitterParameter: 'submitter'
@@ -45,6 +50,11 @@ spec:
           sh """
             kubectl describe deployment wordsmith-api-staging-wordsmith-api --namespace staging
             kubectl get ingress wordsmith-api-staging-wordsmith-api --namespace staging
+          """
+        } // container
+        container('curl') {
+          sh """
+            curl -v https://api.staging.wordsmith.beescloud.com/
           """
         } // container
     } // stage
