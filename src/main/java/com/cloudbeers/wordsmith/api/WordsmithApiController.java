@@ -21,17 +21,17 @@ public class WordsmithApiController {
 
     @RequestMapping("/noun")
     public String noun() {
-        return "{word: '" + wordService.generate("nouns") + "'}";
+        return "{\"word\": '" + wordService.generate("nouns") + "'}";
     }
 
     @RequestMapping("/verb")
     public String verb() {
-        return "{word: '" + wordService.generate("verbs") + "'}";
+        return "{\"word\": '" + wordService.generate("verbs") + "'}";
     }
 
     @RequestMapping("/adjective")
     public String adjective() {
-        return "{word: '" + wordService.generate("adjectives") + "'}";
+        return "{\"word\": '" + wordService.generate("adjectives") + "'}";
     }
 
 }
