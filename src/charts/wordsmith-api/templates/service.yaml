@@ -1,9 +1,7 @@
-{{- if .Values.ingress.enabled -}}
-{{- $defaultFullName := template "fullname" . -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.name | default $defaultFullName | quote }}
+  name: {{ .Values.service.name | quote }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 {{- if .Values.service.annotations }}
