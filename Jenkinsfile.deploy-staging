@@ -10,6 +10,11 @@ spec:
       command:
       - cat
       tty: true
+    - name: kubectl
+      image: lachlanevenson/k8s-kubectl:v1.10.7
+      command:
+      - cat
+      tty: true
 """
     ) {
   userInput = input message: 'Application Version', ok: 'Deploy', parameters: [string(description: 'Wordsmith API Helm Chart Version', name: 'Wordsmith Api Version', trim: true)], submitterParameter: 'submitter'
@@ -28,14 +33,19 @@ spec:
                  helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
                  helm repo update
 
+                 helm fetch wordsmith/wordsmith-api --version ${APPLICATION_VERSION}
+
                  helm upgrade wordsmith-api-staging wordsmith/wordsmith-api --version ${APPLICATION_VERSION} --install --namespace staging --wait \
                     --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
-
-                 kubectl describe deployment wordsmith-api-staging-wordsmith-api --namespace staging
-                 echo "FIXME fix ingress"
-                 kubectl get ingress wordsmith-api-staging-wordsmith-api || true
                 """
+              archiveArtifacts artifacts: "wordsmith-api-${APPLICATION_VERSION}.tgz", fingerprint: true
           } // withCredentials
+        } // container
+        container('kubectl') {
+          sh """
+            kubectl describe deployment wordsmith-api-staging-wordsmith-api --namespace staging
+            kubectl get ingress wordsmith-api-staging-wordsmith-api --namespace staging
+          """
         } // container
     } // stage
   } // node

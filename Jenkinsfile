@@ -80,6 +80,7 @@ pipeline {
              # upload helm chart
              curl --data-binary "@wordsmith-api-${APPLICATION_VERSION}.tgz" http://chartmuseum-chartmuseum.core.svc.cluster.local:8080/api/charts
              """
+          archiveArtifacts artifacts: "wordsmith-api-${APPLICATION_VERSION}.tgz", fingerprint: true
         }
       }
     }
