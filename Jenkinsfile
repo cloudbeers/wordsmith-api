@@ -107,8 +107,7 @@ pipeline {
         container('kubectl') {
           sh """
             kubectl describe deployment wordsmith-api-preview-wordsmith-api --namespace preview
-            echo "FIXME fix ingress"
-            kubectl get ingress wordsmith-api-preview-wordsmith-api || true
+            kubectl get ingress wordsmith-api-preview-wordsmith-api --namespace preview
           """
         } // container
       } // steps
