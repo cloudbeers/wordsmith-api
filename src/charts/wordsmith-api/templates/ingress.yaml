@@ -21,7 +21,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ .Values.service.name | quote }}
+              serviceName: {{ .Values.service.name }}
               servicePort: {{ .Values.service.externalPort }}
     {{- end -}}
   {{- if .Values.ingress.tls }}
