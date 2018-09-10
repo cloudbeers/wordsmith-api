@@ -22,6 +22,6 @@ Define the name of the service.
 {{- if .Values.service.name -}}
 {{- printf "%s" .Values.service.name -}}
 {{- else -}}
-{{- printf "%s" template "fullname" . -}}
+{{- template "fullname" . -}}
 {{- end -}}
 {{- end -}}
