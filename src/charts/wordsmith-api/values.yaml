@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: cleclerc/wordsmith-api
   tag: {{version}}
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 service:
   k8sName: wordsmith-api
   type: ClusterIP
