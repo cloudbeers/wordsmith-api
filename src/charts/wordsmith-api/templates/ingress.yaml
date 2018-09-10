@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
 {{- $servicePort := .Values.service.externalPort -}}
-{{- $defaultFullName := template "fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -22,7 +21,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ .Values.service.name | default $defaultFullName | quote }}
+              serviceName: {{ .Values.service.name | quote }}
               servicePort: {{ .Values.service.externalPort }}
     {{- end -}}
   {{- if .Values.ingress.tls }}
