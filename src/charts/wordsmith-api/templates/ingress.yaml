@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := template "serviceName" . -}}
 {{- $servicePort := .Values.service.externalPort -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -22,7 +21,7 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ $serviceName }}
+              serviceName: {{ template "serviceName" . }}
               servicePort: {{ .Values.service.externalPort }}
     {{- end -}}
   {{- if .Values.ingress.tls }}
