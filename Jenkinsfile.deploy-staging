@@ -54,7 +54,7 @@ spec:
         } // container
         container('curl') {
           sh """
-            curl -v https://api.staging.wordsmith.beescloud.com/
+            curl -v https://api.staging.wordsmith.beescloud.com/actuator/health
           """
         } // container
     } // stage
