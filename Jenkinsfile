@@ -106,7 +106,7 @@ pipeline {
              helm repo add wordsmith http://chartmuseum-chartmuseum.core.svc.cluster.local:8080
              helm repo update
 
-             helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version ${APPLICATION_VERSION} --install --namespace preview --wait \
+             helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version ${APPLICATION_VERSION} --install --force --namespace preview --wait \
                 --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
             """
         } // container
