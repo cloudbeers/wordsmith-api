@@ -26,7 +26,7 @@ spec:
         container('helm') {
           // FIXME use staging database instead of preview database
           PG_SQL_JDBC_URL = 'jdbc:postgresql://wordsmith-preview.ca3tifbqfpuf.us-east-1.rds.amazonaws.com:5432/wordsmith'
-          APP_HOST = 'api.preview.wordsmith.beescloud.com'
+          APP_HOST = 'api.staging.wordsmith.beescloud.com'
           withCredentials([usernamePassword(credentialsId: 'postgresql.preview', passwordVariable: 'PG_SQL_CREDS_PSW', usernameVariable: 'PG_SQL_CREDS_USR')]) {
               sh """
                  helm init --client-only
