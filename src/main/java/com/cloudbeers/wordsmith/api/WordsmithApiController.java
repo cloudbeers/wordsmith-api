@@ -1,5 +1,6 @@
 package com.cloudbeers.wordsmith.api;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,19 +20,19 @@ public class WordsmithApiController {
         return "Greetings from Wordsmith application!";
     }
 
-    @RequestMapping("/noun")
+    @RequestMapping(path = "/noun", produces=MediaType.APPLICATION_JSON_VALUE)
     public String noun() {
-        return "{\"word\": '" + wordService.generate("nouns") + "'}";
+        return "{\"word\": \"" + wordService.generate("nouns") + "\"}";
     }
 
-    @RequestMapping("/verb")
+    @RequestMapping(path = "/verb", produces=MediaType.APPLICATION_JSON_VALUE)
     public String verb() {
-        return "{\"word\": '" + wordService.generate("verbs") + "'}";
+        return "{\"word\": \"" + wordService.generate("verbs") + "\"}";
     }
 
-    @RequestMapping("/adjective")
+    @RequestMapping(path = "/adjective", produces=MediaType.APPLICATION_JSON_VALUE)
     public String adjective() {
-        return "{\"word\": '" + wordService.generate("adjectives") + "'}";
+        return "{\"word\": \"" + wordService.generate("adjectives") + "\"}";
     }
 
 }

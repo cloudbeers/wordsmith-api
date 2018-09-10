@@ -38,20 +38,20 @@ public class WordsmithApiControllerTest {
     public void getNoun() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/noun").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(isIn(Arrays.asList("{\"word\": 'Developer'}", "{\"word\": 'Project Manager'}", "{\"word\": 'Tester'}"))));
+                .andExpect(content().string(isIn(Arrays.asList("{\"word\": \"Developer\"}", "{\"word\": \"Project Manager\"}", "{\"word\": \"Tester\"}"))));
     }
 
     @Test
     public void getVerb() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/verb").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(isIn(Arrays.asList("{\"word\": 'loves'}", "{\"word\": 'hates'}", "{\"word\": 'cares about'}"))));
+                .andExpect(content().string(isIn(Arrays.asList("{\"word\": \"loves\"}", "{\"word\": \"hates\"}", "{\"word\": \"cares about\"}"))));
     }
 
     @Test
     public void getAdjective() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/adjective").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(isIn(Arrays.asList("{\"word\": 'Beautiful'}", "{\"word\": 'Ugly'}"))));
+                .andExpect(content().string(isIn(Arrays.asList("{\"word\": \"Beautiful\"}", "{\"word\": \"Ugly\"}"))));
     }
 }
