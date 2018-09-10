@@ -19,7 +19,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Define the name of the service.
 */}}
 {{- define "serviceName" -}}
-{{- if .Values.service.name -}}
+{{- if (.Values.service.name) -}}
 {{- .Values.service.name -}}
 {{- else -}}
 {{- template "fullname" . -}}
