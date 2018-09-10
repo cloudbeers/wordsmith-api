@@ -4,7 +4,6 @@ image:
   tag: {{version}}
   pullPolicy: IfNotPresent
 service:
-  name: wordsmith-api
   type: ClusterIP
   externalPort: 80
   internalPort: 8080
