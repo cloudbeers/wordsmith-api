@@ -24,6 +24,11 @@ pipeline {
       command:
       - cat
       tty: true
+    - name: kubectl
+      image: lachlanevenson/k8s-kubectl:v1.10.7
+      command:
+      - cat
+      tty: true
     volumes:
       - name: docker-sock
         hostPath:
@@ -97,13 +102,16 @@ pipeline {
 
              helm upgrade wordsmith-api-preview wordsmith/wordsmith-api --version ${APPLICATION_VERSION} --install --namespace preview --wait \
                 --set ingress.hosts[0]=${APP_HOST},database.username=${PG_SQL_CREDS_USR},database.password=${PG_SQL_CREDS_PSW},database.url=${PG_SQL_JDBC_URL},image.pullPolicy=Always
-
-             kubectl describe deployment wordsmith-api-preview-wordsmith-api --namespace preview
-             echo "FIXME fix ingress"
-             kubectl get ingress wordsmith-api-preview-wordsmith-api || true
             """
         } // container
-       } // steps
+        container('kubectl') {
+          sh """
+            kubectl describe deployment wordsmith-api-preview-wordsmith-api --namespace preview
+            echo "FIXME fix ingress"
+            kubectl get ingress wordsmith-api-preview-wordsmith-api || true
+          """
+        } // container
+      } // steps
     } // stage
   } // stages
 }

@@ -19,6 +19,29 @@ kubectl port-forward --namespace preview $POD_NAME 8080:8080
 ```
 
 
+# Installation
+
+## Chartmuseum
+
+```
+helm upgrade --install install stable/chartmuseum --name chartmuseum --values chartmuseum/values.yaml
+```
+
+```
+helm upgrade --install install stable/chartmuseum --name chartmuseum --set env.open.DISABLE_API=false,env.open.ALLOW_OVERWRITE=true,ingress.enabled=true,ingress.hosts[0]
+
+```
+
+
+```
+helm upgrade --install install stable/chartmuseum --name chartmuseum --set env.open.DISABLE_API=false,env.open.ALLOW_OVERWRITE=true
+```
+
+
+```
+helm upgrade --install install stable/chartmuseum --name chartmuseum --set env.open.DISABLE_API=false,env.open.ALLOW_OVERWRITE=true
+```
+
 # Problems
 
 ```
