@@ -15,9 +15,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
+Define the name of the service.
+*/}}
 {{- define "serviceName" -}}
 {{- if .Values.service.name -}}
-{{- printf "%s" serviceName -}}
+{{- printf "%s" .Values.service.name -}}
 {{- else -}}
 {{- printf "%s" template "fullname" . -}}
 {{- end -}}
