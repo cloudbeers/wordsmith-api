@@ -1,4 +1,0 @@
-apiVersion: v1
-description: Wordsmith API
-name: wordsmith-api
-version: v1.0.0
