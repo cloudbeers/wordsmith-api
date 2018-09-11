@@ -54,9 +54,7 @@ pipeline {
       steps {
         container('jdk') {
           withMaven(mavenOpts: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
-            sh './mvnw clean install'
-            sh './mvnw sonar:sonar -Dsonar.login=${SONAR_CREDS_USR} -Dsonar.password=${SONAR_CREDS_PSW}'
-            sh './mvnw deploy'
+            sh './mvnw clean sonar:sonar deploy -Dsonar.login=${SONAR_CREDS_USR} -Dsonar.password=${SONAR_CREDS_PSW}'
           }
         }
       }
