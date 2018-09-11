@@ -22,17 +22,17 @@ public class WordsmithApiController {
 
     @RequestMapping(path = "/noun", produces=MediaType.APPLICATION_JSON_VALUE)
     public String noun() {
-        return "{\"word\": \"" + wordService.generate("nouns") + "\"}";
+        return "{\"word\": \"" + wordService.generateNoun() + "\"}";
     }
 
     @RequestMapping(path = "/verb", produces=MediaType.APPLICATION_JSON_VALUE)
     public String verb() {
-        return "{\"word\": \"" + wordService.generate("verbs") + "\"}";
+        return "{\"word\": \"" + wordService.generateVerb() + "\"}";
     }
 
     @RequestMapping(path = "/adjective", produces=MediaType.APPLICATION_JSON_VALUE)
     public String adjective() {
-        return "{\"word\": \"" + wordService.generate("adjectives") + "\"}";
+        return "{\"word\": \"" + wordService.generateAdjective() + "\"}";
     }
 
 }
