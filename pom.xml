@@ -59,11 +59,13 @@
         <java.version>1.8</java.version>
         <postgres.version>42.1.4</postgres.version>
         <project.scm.id>github</project.scm.id>
+        <sonar.host.url>https://sonarqube.wordsmith.beescloud.com</sonar.host.url>
     </properties>
+
     <scm>
         <connection>scm:git:https://github.com/cloudbeers/wordsmith-api.git </connection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
 
     <build>
         <resources>
@@ -151,17 +153,19 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.5.0.1254</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>4.2.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <repositories>
         <repository>
             <id>nexus3.beescloud.com</id>
