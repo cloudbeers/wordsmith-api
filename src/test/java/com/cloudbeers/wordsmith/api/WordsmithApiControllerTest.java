@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,7 +30,7 @@ public class WordsmithApiControllerTest {
     public void getIndex() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Greetings from Wordsmith application!")));
+                .andExpect(content().string(startsWith("Greetings from ")));
     }
 
     @Test
