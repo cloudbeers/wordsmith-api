@@ -17,7 +17,7 @@ public class WordsmithApiController {
 
     @RequestMapping("/")
     public String index() {
-        return "Greetings from Wordsmith application!";
+        return "Greetings from Wordsmith Spring Boot application!";
     }
 
     @RequestMapping(path = "/noun", produces=MediaType.APPLICATION_JSON_VALUE)
