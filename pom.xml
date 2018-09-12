@@ -4,7 +4,7 @@
 
     <groupId>com.cloudbeers.wordsmith</groupId>
     <artifactId>wordsmith-api</artifactId>
-    <version>1.0.17-SNAPSHOT</version>
+    <version>1.0.17</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -68,7 +68,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/cloudbeers/wordsmith-api.git </connection>
-      <tag>HEAD</tag>
+      <tag>wordsmith-api-1.0.17</tag>
     </scm>
 
     <build>
